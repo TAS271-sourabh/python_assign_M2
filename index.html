@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>S3 File Manager</title>
+</head>
+<body>
+    <h1>List of Files in Bucket</h1>
+    <ul>
+        {% for item in contents %}
+        <li>
+            {{ item.Key }}
+            <form action="{{ url_for('delete_file', file_key=item.Key) }}" method="post" style="display:inline;">
+                <button type="submit">Delete File</button>
+            </form>
+            <form action="{{ url_for('copy_file') }}" method="post" style="display:inline;">
+                <input type="hidden" name="src_key" value="{{ item.Key }}">
+                <input type="text" name="dest_key" placeholder="Destination Key" required>
+                <button type="submit">Copy File</button>
+            </form>
+            <form action="{{ url_for('move_file') }}" method="post" style="display:inline;">
+                <input type="hidden" name="src_key" value="{{ item.Key }}">
+                <input type="text" name="dest_key" placeholder="Destination Key" required>
+                <button type="submit">Move File</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+    
+    <h2>Upload a File</h2>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" required>
+        <input type="text" name="folder_name" placeholder="Folder Name" required>
+        <button type="submit">Upload</button>
+    </form>
+
+    <h2>Create a Folder</h2>
+    <form action="/create_folder" method="post">
+        <input type="text" name="folder_name" placeholder="Folder Name" required>
+        <button type="submit">Create Folder</button>
+    </form>
+
+    <h2>Delete a Folder</h2>
+    <form action="/delete_folder" method="post">
+        <input type="text" name="folder_name" placeholder="Folder Name" required>
+        <button type="submit">Delete Folder</button>
+    </form>
+</body>
+</html>
